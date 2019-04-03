@@ -16,7 +16,14 @@ public class Avdeling {
 
 	private String avdelingsnavn;
 	private int sjef;
-
+	
+/*	@OneToMany(
+			mappedBy = "avd",
+			fetch = FetchType.EAGER,
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			orphanRemoval = true)
+		private List<Ansatt> avdListe;
+*/
 	public Avdeling() {
 		
 	}
@@ -49,6 +56,7 @@ public class Avdeling {
 	public void setSjef(int sjef) {
 		this.sjef = sjef;
 	}
+
 
 	@Override
 	public String toString() {

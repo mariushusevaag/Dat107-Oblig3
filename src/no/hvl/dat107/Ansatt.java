@@ -95,15 +95,14 @@ public class Ansatt {
 		this.ansattID = ansattID;
 	}
 	
-	public String getAvdeling() {
-		return avdeling;
-	}
-	
 	public void setAvdeling(String avdeling) {
 		this.avdeling = avdeling;
 	}
 	
-
+	public String getAvdeling() {
+		return avdeling;
+	}
+	
 	@Override
 	public String toString() {
 		return "Ansatt { ID : " + this.ansattID + 

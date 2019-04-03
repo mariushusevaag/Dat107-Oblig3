@@ -1,7 +1,11 @@
 package no.hvl.dat107;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
+
+import java.util.Iterator;
+
 
 public class Main {
 
@@ -17,6 +21,8 @@ public class Main {
 			System.out.println("3  = Oppdater en ansatt");
 			System.out.println("4  = Legg til ansatt");
 			System.out.println("5  = Søk etter avdeling på ID");
+			System.out.println("6  = Skriv ut alle ved avdeling");
+			System.out.println("7  = Legg til avdeling");
 
 			switch(scanner.nextLine()) {
 
@@ -53,6 +59,7 @@ public class Main {
 					System.out.println("1 = Endre lønn");
 					System.out.println("2 = Endre stilling");
 					System.out.println("3 = Endre lønn og stilling");
+					System.out.println("4 = Endre avdeling");
 					switch(scanner.nextLine()) {
 						case "1": {
 							System.out.println("Skriv inn månedslønn:");
@@ -72,6 +79,17 @@ public class Main {
 							System.out.println("Skriv inn stilling:");
 							funnet.setStilling(scanner.nextLine());
 							ansatt.oppdaterAnsatt(funnet);
+							break;
+						}
+						case "4": {
+							if (!erSjef(funnet)) {
+								System.out.println("Velg ny avdeling, ved hjelp av id:");
+								int nyAvd = Integer.valueOf(scanner.nextLine());
+								
+								oppdaterAvdelingForAnsatt(funnet, nyAvd);
+							} else {
+								System.out.println("Kan ikke oppdatere avdeling fordi " + funnet.getBrukernavn() + " er sjef på en annen avdeling.");
+							}
 							break;
 						}
 					}
@@ -113,6 +131,31 @@ public class Main {
 					System.out.println(funnet);
 					break;
 				}
+				case "6": {
+					//Skriv ut alle på en avdeling
+					System.out.println("Skriv inn avdeling id:");
+					skrivAlleVedAvdeling(scanner);
+					break;
+				}
+				case "7": {
+					//Legge til en ny avdeling, samt angi sjef i ny avdeling
+					System.out.println("Skriv søkestreng: ID/Brukernavn på sjef i den nye avdelingen");
+					Ansatt funnet = finnAnsatt(scanner);
+					if(funnet == null) {
+						System.out.println("Fant ikke den ansatte");
+						break;
+					}
+					
+					if (!erSjef(funnet)) {
+						System.out.println("Skriv inn navn på ny avdeling");
+						String avdelingsNavn = scanner.nextLine();
+						leggTilAvdeling(avdelingsNavn, funnet.getAnsattID());
+						
+					} else {
+						System.out.println("Kan ikke oppdatere avdeling fordi " + funnet.getBrukernavn() + " er sjef på en annen avdeling.");
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -135,6 +178,77 @@ public class Main {
 		AvdelingEAO avdeling = new AvdelingEAO();
 		int id = Integer.parseInt(input);
 		return avdeling.finnAvdelingMedID(id);
+	}
+	
+	public static Avdeling finnAvdeling(int sc) {
+		AvdelingEAO avdeling = new AvdelingEAO();
+		return avdeling.finnAvdelingMedID(sc);
+	}
+	
+	public static void skrivAlleVedAvdeling(Scanner sc) {
+		AvdelingEAO avdeling = new AvdelingEAO();
+		String avdelingNavn = finnAvdeling(sc).getAvdelingsnavn();
+		
+		List<Ansatt> ansatte = avdeling.alleAnsatteVedAvdeling(avdelingNavn);
+		Iterator<Ansatt> iter = ansatte.iterator();
+		while (iter.hasNext()) {
+			Ansatt ansatt = iter.next();
+			if (erSjef(ansatt)) {
+				System.out.println("*" + ansatt + "*");
+			} else {
+				System.out.println(ansatt);
+			}
+		}
+	}
+	private static boolean erSjef(Ansatt a) {
+		boolean sjef = false;
+		AvdelingEAO avdeling = new AvdelingEAO();
+		Avdeling avd = avdeling.finnAvdelingPaaNavn(a.getAvdeling());
+
+		if (avd.getSjef() == a.getAnsattID() && avd != null) {
+			sjef = true;
+		}
+
+		return sjef;
+	}
+	
+	public static void oppdaterAvdelingForAnsatt(Ansatt a, int nyAvdelingId) {
+		if (!erSjef(a)) {
+			
+			String avdelingNavn = finnAvdeling(nyAvdelingId).getAvdelingsnavn();
+			
+			a.setAvdeling(avdelingNavn);
+			AvdelingEAO avdeling = new AvdelingEAO();
+			avdeling.oppdaterAvdelingForAnsatt(a);
+			System.out.println("Ansatt " + a.getAnsattID() + ", " + a.getBrukernavn() + " har fått ny avdeling: "
+					+ avdeling.finnAvdelingMedID(nyAvdelingId));
+		} else {
+			System.out.println(
+					"Kan ikke oppdatere avdeling fordi " + a.getBrukernavn() + " er sjef på en annen avdeling.");
+		}
+	}
+	
+	public static void leggTilAvdeling(String navn, int id) {
+		try {
+			AnsattEAO ansatt = new AnsattEAO();
+			Ansatt a = ansatt.finnAnsattMedID(id);
+			if (!erSjef(a) && a != null) {
+				Avdeling avd = new Avdeling(navn, id);
+				AvdelingEAO avdeling = new AvdelingEAO();
+				avdeling.leggTilNyAvdeling(avd);
+				
+				a.setStilling("sjef");
+				ansatt.oppdaterAnsatt(a);
+
+				a.setAvdeling(avd.getAvdelingsnavn());
+				avdeling.oppdaterAvdelingForAnsatt(a);
+				
+				System.out.println("Ansatt " + a.getAnsattID() + ", " + a.getBrukernavn() + " er nå sjef i den nye avdelingen: "
+						+ navn);
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
