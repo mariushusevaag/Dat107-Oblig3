@@ -11,7 +11,7 @@ public class Main {
 		while(!ferdig) {
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("Meny:");
-			System.out.println("0  = Avslutt2");
+			System.out.println("0  = Avslutt");
 			System.out.println("1  = Søk etter ansatt på ID, eller brukernavn");
 			System.out.println("2  = Skriv ut alle ansatte");
 			System.out.println("3  = Oppdater en ansatt");
