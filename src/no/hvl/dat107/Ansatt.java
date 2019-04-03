@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Ansatt", schema = "public")
+@Table(name = "Ansatt", schema = "oblig3")
 public class Ansatt {
 
 	@Id
@@ -21,6 +21,7 @@ public class Ansatt {
 	private LocalDate ansettelse_start;
 	private String stilling;
 	private int maanedslonn;
+	private String avdeling;
 
 
 	public Ansatt() {
@@ -28,13 +29,14 @@ public class Ansatt {
 	}
 
 	public Ansatt(String brukernavn, String fornavn, String etternavn, LocalDate ansettelse_start, String stilling,
-			int maanedslonn) {
+			int maanedslonn, String avdeling) {
 		this.brukernavn = brukernavn;
 		this.fornavn = fornavn;
 		this.etternavn = etternavn;
 		this.ansettelse_start = ansettelse_start;
 		this.stilling = stilling;
 		this.maanedslonn = maanedslonn;
+		this.avdeling = avdeling;
 	}
 
 	public int getMaanedslonn() {
@@ -92,11 +94,20 @@ public class Ansatt {
 	public void setAnsattId(int ansattID) {
 		this.ansattID = ansattID;
 	}
+	
+	public String getAvdeling() {
+		return avdeling;
+	}
+	
+	public void setAvdeling(String avdeling) {
+		this.avdeling = avdeling;
+	}
+	
 
 	@Override
 	public String toString() {
 		return "Ansatt { ID : " + this.ansattID + 
 		" | Navn : " + this.fornavn + " " + this.etternavn + 
-		" | Stilling : " + this.stilling + " | Månedslønn : " + this.maanedslonn + " }";
+		" | Stilling : " + this.stilling + " | Månedslønn : " + this.maanedslonn + " | Avdeling : " + this.avdeling + " }";
 	}
 }
