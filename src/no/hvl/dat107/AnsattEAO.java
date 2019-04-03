@@ -55,7 +55,8 @@ public class AnsattEAO {
 		return ansatt;
 	}
 	
-	public boolean leggTilAnsatt(String brukernavn, String fornavn, String etternavn, LocalDate ansettelse_dato, String stilling, int maanedslonn ) {
+	public boolean leggTilAnsatt(String brukernavn, String fornavn, String etternavn, LocalDate ansettelse_dato,
+			String stilling, int maanedslonn, String avdeling) {
 
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -64,7 +65,7 @@ public class AnsattEAO {
 		try {
 			tx.begin();
 			
-			Ansatt ansatt = new Ansatt(brukernavn, fornavn, etternavn, ansettelse_dato, stilling, maanedslonn);
+			Ansatt ansatt = new Ansatt(brukernavn, fornavn, etternavn, ansettelse_dato, stilling, maanedslonn, avdeling);
 			
 			em.persist(ansatt);
 

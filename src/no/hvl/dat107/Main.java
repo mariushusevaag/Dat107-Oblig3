@@ -16,6 +16,7 @@ public class Main {
 			System.out.println("2  = Skriv ut alle ansatte");
 			System.out.println("3  = Oppdater en ansatt");
 			System.out.println("4  = Legg til ansatt");
+			System.out.println("5  = Søk etter avdeling på ID");
 
 			switch(scanner.nextLine()) {
 
@@ -93,14 +94,25 @@ public class Main {
 					String stilling = scanner.nextLine();
 					System.out.println("Oppgi månedslønn:");
 					int mndln = Integer.valueOf(scanner.nextLine());
+					System.out.println("Oppgi avdeling:");
+					String avdeling = scanner.nextLine();
 
 				
 					AnsattEAO ansatt = new AnsattEAO();
-					ansatt.leggTilAnsatt(brukernavn, fornavn, etternavn, ansDato, stilling, mndln);
+					ansatt.leggTilAnsatt(brukernavn, fornavn, etternavn, ansDato, stilling, mndln, avdeling);
 					ansatt.skrivUtTabell();
 					break;
 				}
-			
+				case "5": {
+					//Søk etter avdeling på avdeling Id
+					System.out.println("Søk etter avdeling med id:");
+					Avdeling funnet = finnAvdeling(scanner);
+					if(funnet == null) {
+						System.out.println("Fant ikke den ansatte");
+					}
+					System.out.println(funnet);
+					break;
+				}
 			}
 		}
 	}
@@ -116,6 +128,13 @@ public class Main {
 			return ansatt.finnAnsattPaaNavn(rawid);
 		}
 
+	}
+	
+	public static Avdeling finnAvdeling(Scanner sc) {
+		String input = sc.nextLine();
+		AvdelingEAO avdeling = new AvdelingEAO();
+		int id = Integer.parseInt(input);
+		return avdeling.finnAvdelingMedID(id);
 	}
 }
 
