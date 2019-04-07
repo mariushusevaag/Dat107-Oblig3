@@ -13,12 +13,12 @@ public class Ansatt {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int ansattID;
+	private int ansatt_id;
 
 	private String brukernavn;
 	private String fornavn;
 	private String etternavn;
-	private LocalDate ansettelse_start;
+	private LocalDate ansatt_dato;
 	private String stilling;
 	private int maanedslonn;
 	private String avdeling;
@@ -28,55 +28,23 @@ public class Ansatt {
 		
 	}
 
-	public Ansatt(String brukernavn, String fornavn, String etternavn, LocalDate ansettelse_start, String stilling,
+	public Ansatt(String brukernavn, String fornavn, String etternavn, LocalDate ansatt_dato, String stilling,
 			int maanedslonn, String avdeling) {
 		this.brukernavn = brukernavn;
 		this.fornavn = fornavn;
 		this.etternavn = etternavn;
-		this.ansettelse_start = ansettelse_start;
+		this.ansatt_dato = ansatt_dato;
 		this.stilling = stilling;
 		this.maanedslonn = maanedslonn;
 		this.avdeling = avdeling;
 	}
-
-	public int getMaanedslonn() {
-		return maanedslonn;
+	
+	public int getAnsatt_id() {
+		return ansatt_id;
 	}
 
-	public void setMaanedslonn(int maanedslonn) {
-		this.maanedslonn = maanedslonn;
-	}
-
-	public String getStilling() {
-		return stilling;
-	}
-
-	public void setStilling(String stilling) {
-		this.stilling = stilling;
-	}
-
-	public LocalDate getAnsettelsesDato() {
-		return ansettelse_start;
-	}
-
-	public void setAnsettelsesDato(LocalDate ansettelse_start) {
-		this.ansettelse_start = ansettelse_start;
-	}
-
-	public String getEtternavn() {
-		return etternavn;
-	}
-
-	public void setEtternavn(String etternavn) {
-		this.etternavn = etternavn;
-	}
-
-	public String getFornavn() {
-		return fornavn;
-	}
-
-	public void setFornavn(String fornavn) {
-		this.fornavn = fornavn;
+	public void setAnsatt_id(int ansatt_id) {
+		this.ansatt_id = ansatt_id;
 	}
 
 	public String getBrukernavn() {
@@ -87,26 +55,58 @@ public class Ansatt {
 		this.brukernavn = brukernavn;
 	}
 
-	public int getAnsattID() {
-		return ansattID;
+	public String getFornavn() {
+		return fornavn;
 	}
 
-	public void setAnsattId(int ansattID) {
-		this.ansattID = ansattID;
+	public void setFornavn(String fornavn) {
+		this.fornavn = fornavn;
 	}
-	
-	public void setAvdeling(String avdeling) {
-		this.avdeling = avdeling;
+
+	public String getEtternavn() {
+		return etternavn;
 	}
-	
+
+	public void setEtternavn(String etternavn) {
+		this.etternavn = etternavn;
+	}
+
+	public LocalDate getAnsatt_dato() {
+		return ansatt_dato;
+	}
+
+	public void setAnsatt_dato(LocalDate ansatt_dato) {
+		this.ansatt_dato = ansatt_dato;
+	}
+
+	public String getStilling() {
+		return stilling;
+	}
+
+	public void setStilling(String stilling) {
+		this.stilling = stilling;
+	}
+
+	public int getMaanedslonn() {
+		return maanedslonn;
+	}
+
+	public void setMaanedslonn(int maanedslonn) {
+		this.maanedslonn = maanedslonn;
+	}
+
 	public String getAvdeling() {
 		return avdeling;
 	}
-	
+
+	public void setAvdeling(String avdeling) {
+		this.avdeling = avdeling;
+	}
+
 	@Override
 	public String toString() {
-		return "Ansatt { ID : " + this.ansattID + 
-		" | Navn : " + this.fornavn + " " + this.etternavn + 
+		return "Ansatt { ID : " + this.ansatt_id + 
+		" | Navn : " + this.fornavn + " " + this.etternavn + " | Dato for ansettelse : " + this.ansatt_dato + 
 		" | Stilling : " + this.stilling + " | Månedslønn : " + this.maanedslonn + " | Avdeling : " + this.avdeling + " }";
 	}
 }

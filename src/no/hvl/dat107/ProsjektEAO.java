@@ -1,6 +1,5 @@
 package no.hvl.dat107;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,40 +10,40 @@ import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
-public class AnsattEAO {
+public class ProsjektEAO {
 
 	private EntityManagerFactory emf;
 
-	public AnsattEAO() {
+	public ProsjektEAO() {
 		emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
 	}
 	
-	public Ansatt finnAnsattMedID(int ansatt_id) {
+	public Prosjekt finnProsjekttMedID(int prosjekt_id) {
 
 		EntityManager em = emf.createEntityManager();
 
-		Ansatt a1;
+		Prosjekt p1;
 		try {
-			a1 = em.find(Ansatt.class, ansatt_id);
+			p1 = em.find(Prosjekt.class, prosjekt_id);
 
 		} finally {
 			em.close();
 		}
-		return a1;
+		return p1;
 	}
 	
-	public Ansatt finnAnsattPaaNavn(String brukernavn) {
+	public Prosjekt finnProsjektPaaNavn(String prosjekt_navn) {
 
-		String queryString = "SELECT a FROM Ansatt a WHERE a.brukernavn = :navn";
+		String queryString = "SELECT p FROM Prosjekt p WHERE p.prosjekt_navn = :navn";
 
 		EntityManager em = emf.createEntityManager();
 
-		Ansatt ansatt = null;
+		Prosjekt prosjekt = null;
 		try {
-			TypedQuery<Ansatt> query
-				= em.createQuery(queryString, Ansatt.class);
-			query.setParameter("navn", brukernavn);
-			ansatt = query.getSingleResult();
+			TypedQuery<Prosjekt> query
+				= em.createQuery(queryString, Prosjekt.class);
+			query.setParameter("navn", prosjekt_navn);
+			prosjekt = query.getSingleResult();
 
 		} catch (NoResultException e) {
 			// e.printStackTrace();
@@ -52,11 +51,10 @@ public class AnsattEAO {
 			em.close();
 		}
 
-		return ansatt;
+		return prosjekt;
 	}
 	
-	public boolean leggTilAnsatt(String brukernavn, String fornavn, String etternavn, LocalDate ansettelse_dato,
-			String stilling, int maanedslonn, String avdeling) {
+	public boolean leggTilProsjekt(String prosjekt_navn, String prosjekt_beskrivelse) {
 
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -65,9 +63,9 @@ public class AnsattEAO {
 		try {
 			tx.begin();
 			
-			Ansatt ansatt = new Ansatt(brukernavn, fornavn, etternavn, ansettelse_dato, stilling, maanedslonn, avdeling);
+			Prosjekt prosjekt = new Prosjekt(prosjekt_navn, prosjekt_beskrivelse);
 			
-			em.persist(ansatt);
+			em.persist(prosjekt);
 
 			tx.commit();
 			fullfort = true;
@@ -88,31 +86,31 @@ public class AnsattEAO {
 		return fullfort;
 	}
 	
-	public void skrivUtTabell() {
+	public void skrivUtProsjektTabell() {
 
-		String queryString = "SELECT t FROM Ansatt t ";
+		String queryString = "SELECT t FROM Prosjekt t ";
 
 		EntityManager em = emf.createEntityManager();
 
-		List<Ansatt> ansatte;
+		List<Prosjekt> prosjekter;
 		try {
-			TypedQuery<Ansatt> query = em.createQuery(queryString, Ansatt.class);
-			ansatte = query.getResultList();
-			for(Ansatt ansatt : ansatte) {
-				System.out.println(ansatt);
+			TypedQuery<Prosjekt> query = em.createQuery(queryString, Prosjekt.class);
+			prosjekter = query.getResultList();
+			for(Prosjekt prosjekt : prosjekter) {
+				System.out.println(prosjekt);
 			}
 
 		} finally {
 			em.close();
 		}
 	}
-	public void oppdaterAnsatt(Ansatt ansatt) {
+	public void oppdaterProsjekt(Prosjekt prosjekt) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
 
-			em.merge(ansatt);
+			em.merge(prosjekt);
 
 			tx.commit();
 		} catch (Throwable e) {
