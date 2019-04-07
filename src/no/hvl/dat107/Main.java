@@ -149,7 +149,7 @@ public class Main {
 					if (!erSjef(funnet)) {
 						System.out.println("Skriv inn navn på ny avdeling");
 						String avdelingsNavn = scanner.nextLine();
-						leggTilAvdeling(avdelingsNavn, funnet.getAnsattID());
+						leggTilAvdeling(avdelingsNavn, funnet.getAnsatt_id());
 						
 					} else {
 						System.out.println("Kan ikke oppdatere avdeling fordi " + funnet.getBrukernavn() + " er sjef på en annen avdeling.");
@@ -187,7 +187,7 @@ public class Main {
 	
 	public static void skrivAlleVedAvdeling(Scanner sc) {
 		AvdelingEAO avdeling = new AvdelingEAO();
-		String avdelingNavn = finnAvdeling(sc).getAvdelingsnavn();
+		String avdelingNavn = finnAvdeling(sc).getAvdeling_navn();
 		
 		List<Ansatt> ansatte = avdeling.alleAnsatteVedAvdeling(avdelingNavn);
 		Iterator<Ansatt> iter = ansatte.iterator();
@@ -205,7 +205,7 @@ public class Main {
 		AvdelingEAO avdeling = new AvdelingEAO();
 		Avdeling avd = avdeling.finnAvdelingPaaNavn(a.getAvdeling());
 
-		if (avd.getSjef() == a.getAnsattID() && avd != null) {
+		if (avd.getSjef_id() == a.getAnsatt_id() && avd != null) {
 			sjef = true;
 		}
 
@@ -215,12 +215,12 @@ public class Main {
 	public static void oppdaterAvdelingForAnsatt(Ansatt a, int nyAvdelingId) {
 		if (!erSjef(a)) {
 			
-			String avdelingNavn = finnAvdeling(nyAvdelingId).getAvdelingsnavn();
+			String avdelingNavn = finnAvdeling(nyAvdelingId).getAvdeling_navn();
 			
 			a.setAvdeling(avdelingNavn);
 			AvdelingEAO avdeling = new AvdelingEAO();
 			avdeling.oppdaterAvdelingForAnsatt(a);
-			System.out.println("Ansatt " + a.getAnsattID() + ", " + a.getBrukernavn() + " har fått ny avdeling: "
+			System.out.println("Ansatt " + a.getAnsatt_id() + ", " + a.getBrukernavn() + " har fått ny avdeling: "
 					+ avdeling.finnAvdelingMedID(nyAvdelingId));
 		} else {
 			System.out.println(
@@ -240,10 +240,10 @@ public class Main {
 				a.setStilling("sjef");
 				ansatt.oppdaterAnsatt(a);
 
-				a.setAvdeling(avd.getAvdelingsnavn());
+				a.setAvdeling(avd.getAvdeling_navn());
 				avdeling.oppdaterAvdelingForAnsatt(a);
 				
-				System.out.println("Ansatt " + a.getAnsattID() + ", " + a.getBrukernavn() + " er nå sjef i den nye avdelingen: "
+				System.out.println("Ansatt " + a.getAnsatt_id() + ", " + a.getBrukernavn() + " er nå sjef i den nye avdelingen: "
 						+ navn);
 			}
 		} catch (NullPointerException e) {

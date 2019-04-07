@@ -19,13 +19,13 @@ public class AnsattEAO {
 		emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
 	}
 	
-	public Ansatt finnAnsattMedID(int ansattID) {
+	public Ansatt finnAnsattMedID(int ansatt_id) {
 
 		EntityManager em = emf.createEntityManager();
 
 		Ansatt a1;
 		try {
-			a1 = em.find(Ansatt.class, ansattID);
+			a1 = em.find(Ansatt.class, ansatt_id);
 
 		} finally {
 			em.close();

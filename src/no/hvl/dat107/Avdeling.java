@@ -12,10 +12,10 @@ public class Avdeling {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int avdelingID;
+	private int avdeling_id;
 
-	private String avdelingsnavn;
-	private int sjef;
+	private String avdeling_navn;
+	private int sjef_id;
 	
 /*	@OneToMany(
 			mappedBy = "avd",
@@ -28,39 +28,39 @@ public class Avdeling {
 		
 	}
 
-	public Avdeling(String avdelingsnavn, int sjef) {
-		this.avdelingsnavn = avdelingsnavn;
-		this.sjef = sjef;
+	public Avdeling(String avdeling_navn, int sjef_id) {
+		this.avdeling_navn = avdeling_navn;
+		this.sjef_id = sjef_id;
 	}
 
-	public int getAvdelingID() {
-		return avdelingID;
+	public int getAvdeling_id() {
+		return avdeling_id;
 	}
 
-	public void setAvdelingID(int avdelingID) {
-		this.avdelingID = avdelingID;
+	public void setAvdeling_id(int avdeling_id) {
+		this.avdeling_id = avdeling_id;
 	}
 
-	public String getAvdelingsnavn() {
-		return avdelingsnavn;
+	public String getAvdeling_navn() {
+		return avdeling_navn;
 	}
 
-	public void setAvdelingsnavn(String avdelingsnavn) {
-		this.avdelingsnavn = avdelingsnavn;
+	public void setAvdeling_navn(String avdeling_navn) {
+		this.avdeling_navn = avdeling_navn;
 	}
 
-	public int getSjef() {
-		return sjef;
+	public int getSjef_id() {
+		return sjef_id;
 	}
 
-	public void setSjef(int sjef) {
-		this.sjef = sjef;
+	public void setSjef_id(int sjef_id) {
+		this.sjef_id = sjef_id;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Avdeling { ID : " + this.avdelingID + 
-		" | Navn : " + this.avdelingsnavn + " | Sjef : " + this.sjef + " }";
+		return "Avdeling { ID : " + this.avdeling_id + 
+		" | Navn : " + this.avdeling_navn + " | Sjef : " + this.sjef_id + " }";
 	}
 }
