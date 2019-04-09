@@ -104,6 +104,7 @@ public class ProsjektEAO {
 			em.close();
 		}
 	}
+	
 	public void oppdaterProsjekt(Prosjekt prosjekt) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();

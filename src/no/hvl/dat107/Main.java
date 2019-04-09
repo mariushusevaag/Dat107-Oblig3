@@ -23,6 +23,9 @@ public class Main {
 			System.out.println("5  = Søk etter avdeling på ID");
 			System.out.println("6  = Skriv ut alle ved avdeling");
 			System.out.println("7  = Legg til avdeling");
+			System.out.println("8  = Legg til prosjekt");
+			System.out.println("9  = Legg til prosjektdeltager");
+			
 
 			switch(scanner.nextLine()) {
 
@@ -155,6 +158,34 @@ public class Main {
 						System.out.println("Kan ikke oppdatere avdeling fordi " + funnet.getBrukernavn() + " er sjef på en annen avdeling.");
 					}
 					break;
+				}
+				case "8": {
+					// Legge til nytt prosjekt
+					System.out.println("Oppgi navn på prosjektet:");
+					String prosjekt_navn = scanner.nextLine();
+					System.out.println("Oppgi Beskrivelse:");
+					String prosjekt_beskrivelse = scanner.nextLine();
+					
+
+				
+					ProsjektEAO prosjekt = new ProsjektEAO();
+					prosjekt.leggTilProsjekt(prosjekt_navn, prosjekt_beskrivelse);
+					prosjekt.skrivUtProsjektTabell();
+					break;
+				}
+				case "9": {
+					System.out.println("Oppgi Prosjekt ID: ");
+					int p_id = Integer.parseInt(scanner.nextLine());
+					System.out.println("Oppgi Ansatt ID: ");
+					int a_id = Integer.parseInt(scanner.nextLine());
+					System.out.println("Oppgi ansattes rolle i prosjektet: ");
+					String rolle = scanner.nextLine();
+					System.out.println("Oppgi antall arbeidstimer: ");
+					Double timer = Double.parseDouble(scanner.nextLine());
+					
+					ProsjektAnsatteEAO pa = new ProsjektAnsatteEAO();
+					pa.leggTilDeltager(p_id, a_id, rolle, timer);
+					
 				}
 			}
 		}

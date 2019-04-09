@@ -33,7 +33,7 @@ public class AvdelingEAO {
 	
 	public Avdeling finnAvdelingPaaNavn(String navn) {
 
-		String queryString = "SELECT a FROM Avdeling a WHERE a.avdelingsnavn = :navn";
+		String queryString = "SELECT a FROM Avdeling a WHERE a.avdeling_navn = :navn";
 
 		EntityManager em = emf.createEntityManager();
 
