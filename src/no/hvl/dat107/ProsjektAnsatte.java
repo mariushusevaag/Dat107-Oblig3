@@ -1,53 +1,57 @@
 package no.hvl.dat107;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ProsjektAnsatte", schema = "oblig3")
-@IdClass(ProsjektAnsatte.class)
+@IdClass(ProsjektAnsattePK.class)
 public class ProsjektAnsatte {
 
 	@Id
 	@ManyToOne
-	private int a_id;
-
+	@JoinColumn(name = "ansatt_id")
+	private Ansatt ansatt;
 	@Id
 	@ManyToOne
-	private int p_id;
-
+	@JoinColumn(name = "prosjekt_id")
+	private Prosjekt prosjekt;
+	
 	private String rolle;
-	private Double timer;
+	private BigDecimal timer;
 	
 	public ProsjektAnsatte() {
 
 	}
-	
-	public ProsjektAnsatte(int a_id, int p_id, String rolle, Double timer) {
-		this.a_id = a_id;
-		this.p_id = p_id;
-		this.rolle = rolle;
-		this.timer = timer;
-	}
-	
 
-	public int getA_id() {
-		return a_id;
+	public ProsjektAnsatte(Ansatt ansatt, Prosjekt prosjekt) {
+		this.ansatt = ansatt;
+		this.prosjekt = prosjekt;
+
+		this.rolle = "Ikke satt";
+		this.timer = BigDecimal.ZERO;
 	}
 
-	public void setA_id(int a_id) {
-		this.a_id = a_id;
+	public Ansatt getAnsatt() {
+		return ansatt;
 	}
 
-	public int getP_id() {
-		return p_id;
+	public void setAnsatt(Ansatt ansatt) {
+		this.ansatt = ansatt;
 	}
 
-	public void setP_id(int p_id) {
-		this.p_id = p_id;
+	public Prosjekt getProsjekt() {
+		return prosjekt;
+	}
+
+	public void setProsjekt(Prosjekt prosjekt) {
+		this.prosjekt = prosjekt;
 	}
 
 	public String getRolle() {
@@ -58,18 +62,21 @@ public class ProsjektAnsatte {
 		this.rolle = rolle;
 	}
 
-	public Double getTimer() {
+	public BigDecimal getTimer() {
 		return timer;
 	}
 
-	public void setTimer(Double timer) {
+	public void setTimer(BigDecimal timer) {
 		this.timer = timer;
 	}
 
 	@Override
 	public String toString() {
-		return "Prosjekter med ansatte { Prosjekt ID : " + this.p_id + 
-				" | Ansatt ID : " + this.a_id + " | Rolle : " + this.rolle + 
-				" | Timer : " + this.timer + " }";
+		return String.format("%s, %s, Timer: %s, Rolle: '%s'",
+			prosjekt,
+			ansatt,
+			timer,
+			rolle
+		);
 	}
 }

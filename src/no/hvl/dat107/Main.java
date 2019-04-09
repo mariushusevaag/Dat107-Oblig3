@@ -1,5 +1,6 @@
 package no.hvl.dat107;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -25,6 +26,8 @@ public class Main {
 			System.out.println("7  = Legg til avdeling");
 			System.out.println("8  = Legg til prosjekt");
 			System.out.println("9  = Legg til prosjektdeltager");
+			System.out.println("10  = Registrer timer på prosjekt");
+			System.out.println("11 = Skriv ut informasjon om prosjekt");
 			
 
 			switch(scanner.nextLine()) {
@@ -174,20 +177,69 @@ public class Main {
 					break;
 				}
 				case "9": {
-					System.out.println("Oppgi Prosjekt ID: ");
-					int p_id = Integer.parseInt(scanner.nextLine());
-					System.out.println("Oppgi Ansatt ID: ");
-					int a_id = Integer.parseInt(scanner.nextLine());
-					System.out.println("Oppgi ansattes rolle i prosjektet: ");
+					System.out.println("Skriv inn id/brukernavn på ansatte som skal registreres:");
+					Ansatt funnet = finnAnsatt(scanner);
+					if(funnet == null) {
+						System.out.println("Fant ikke den ansatte");
+						break;
+					}
+					System.out.println("Skriv inn id/navn på prosjekt");
+					Prosjekt pfunnet = finnProsjekt(scanner);
+					if(pfunnet == null) {
+						System.out.println("Fant ikke prosjektet");
+						break;
+					}
+					ProsjektEAO prosjekt = new ProsjektEAO();
+					prosjekt.leggTilAnsatt(funnet, pfunnet);
+					System.out.println("Skriv inn den ansattes rolle:");
 					String rolle = scanner.nextLine();
-					System.out.println("Oppgi antall arbeidstimer: ");
-					Double timer = Double.parseDouble(scanner.nextLine());
-					
-					ProsjektAnsatteEAO pa = new ProsjektAnsatteEAO();
-					pa.leggTilDeltager(p_id, a_id, rolle, timer);
-					
+					prosjekt.setRolle(funnet, pfunnet, rolle);
+					break;
+				}
+				case "10": {
+					//Registrere timer på en ansatt i ett prosjekt
+					System.out.println("Skriv inn brukernavn/id på ansatt:");
+					Ansatt funnet = finnAnsatt(scanner);
+					if(funnet == null) {
+						System.out.println("Fant ikke den ansatte");
+						break;
+					}
+					System.out.println("Skriv inn navn/ID på prosjekt:");
+					Prosjekt pfunnet = finnProsjekt(scanner);
+					if(pfunnet == null) {
+						System.out.println("Fant ikke prosjektet");
+						break;
+					}
+					System.out.println("Skriv inn antall timer som skal registreres");
+					BigDecimal timer = new BigDecimal(scanner.nextLine().replace(',', '.'));
+					ProsjektEAO prosjekt = new ProsjektEAO();
+					prosjekt.leggTilTimer(funnet, pfunnet, timer);
+
+					break;
+				}
+				case "11": {
+					System.out.println("Skriv inn navn/ID på prosjekt:");
+					Prosjekt pfunnet = finnProsjekt(scanner);
+					if(pfunnet == null) {
+						System.out.println("Fant ikke prosjektet");
+						break;
+					}
+					System.out.println(pfunnet.verboseInfo());
+					break;
 				}
 			}
+		}
+	}
+
+
+	private static Prosjekt finnProsjekt(Scanner scanner) {
+		String rawid = scanner.nextLine();
+		ProsjektEAO eao = new ProsjektEAO();
+		try {
+			int iid = Integer.parseInt(rawid);
+			return eao.finnProsjekttMedID(iid);
+		} catch(NumberFormatException e) {
+			return eao.finnProsjektPaaNavn(rawid);
 		}
 	}
 

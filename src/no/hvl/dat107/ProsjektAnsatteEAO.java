@@ -5,9 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
-import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 public class ProsjektAnsatteEAO {
@@ -17,39 +15,27 @@ public class ProsjektAnsatteEAO {
 	private EntityManagerFactory emf;
 
 	public ProsjektAnsatteEAO() {
-		emf = Persistence.createEntityManagerFactory("AnsattPersistenceUnit");
+		emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
 	}
 	
-	public boolean leggTilDeltager(int p_id, int a_id, String rolle, double timer) {
+	public void leggTilDeltager(ProsjektAnsatte prosjektAnsatte) {
 
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 
-		boolean fullfort = false;
 		try {
 			tx.begin();
-			
-			ProsjektAnsatte pa = new ProsjektAnsatte(p_id, a_id, rolle, timer);
-			
-			em.persist(pa);
-
+			em.persist(prosjektAnsatte);
 			tx.commit();
-			fullfort = true;
-		} catch (NoResultException e) {
-		} catch(RollbackException e) {
 
-			//commit failed
-			//FE: Unique constraint
-
-		} catch(Exception e) {
-
+		} catch (Throwable e) {
 			e.printStackTrace();
-			tx.rollback();
-
+			if (tx.isActive()) {
+				tx.rollback();
+			}
 		} finally {
 			em.close();
 		}
-		return fullfort;
 	}
 	
 	public void skrivUtProsjektDeltagerTabell() {

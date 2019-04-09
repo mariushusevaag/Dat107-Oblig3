@@ -1,9 +1,15 @@
 package no.hvl.dat107;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,7 +22,24 @@ public class Prosjekt {
 
 	private String prosjekt_navn;
 	private String prosjekt_beskrivelse;
+	
+	
+	@OneToMany(
+			mappedBy = "prosjekt",
+			fetch = FetchType.EAGER,
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE},
+			orphanRemoval = true)
+		private List<ProsjektAnsatte> pDListe;
 
+	
+	public String verboseInfo() {
+		return String.format(
+			"Prosjekt\nNavn: '%s',\nBeskrivelse: '%s',\nAnsatte:\n%s\n",
+			prosjekt_navn,
+			prosjekt_beskrivelse,
+			pDListe.stream().map(ProsjektAnsatte::toString).collect(Collectors.joining("\n"))
+		);
+	}
 	public Prosjekt() {
 		
 	}
@@ -25,6 +48,7 @@ public class Prosjekt {
 		this.prosjekt_navn = prosjekt_navn;
 		this.prosjekt_beskrivelse = prosjekt_beskrivelse;
 	}
+	
 	
 	public int getProsjekt_id() {
 		return prosjekt_id;
@@ -49,6 +73,31 @@ public class Prosjekt {
 	public void setProsjekt_beskrivelse(String prosjekt_beskrivelse) {
 		this.prosjekt_beskrivelse = prosjekt_beskrivelse;
 	}
+	
+	public List<ProsjektAnsatte> getpDListe() {
+		return pDListe;
+	}
+
+	public void setpDListe(List<ProsjektAnsatte> pDListe) {
+		this.pDListe = pDListe;
+	}
+
+	public void addListe(ProsjektAnsatte prosjektAnsatte) {
+		pDListe.add(prosjektAnsatte);
+	}
+	
+	public void leggTilAnsatt(Ansatt ansatt) {
+		ProsjektEAO pEAO = new ProsjektEAO();
+
+		pEAO.leggTilAnsatt(ansatt, this);
+	}
+
+	public void leggTilAnsatt(List<Ansatt> ansatte) {
+		for(Ansatt ansatt : ansatte) {
+			leggTilAnsatt(ansatt);
+		}
+	}
+	
 
 	@Override
 	public String toString() {

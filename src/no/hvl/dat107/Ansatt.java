@@ -39,6 +39,11 @@ public class Ansatt {
 		this.avdeling = avdeling;
 	}
 	
+	public Ansatt(String brukerNavn2, String forNavn2, String etterNavn2, LocalDate ansettelseDato, String stilling2,
+			int maanedslonn2, Avdeling avdeling2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getAnsatt_id() {
 		return ansatt_id;
 	}

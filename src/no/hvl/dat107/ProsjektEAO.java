@@ -1,5 +1,7 @@
 package no.hvl.dat107;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -114,6 +116,140 @@ public class ProsjektEAO {
 			em.merge(prosjekt);
 
 			tx.commit();
+		} catch (Throwable e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+			em.close();
+		}
+	}
+
+	public void leggTilAnsatt(Ansatt ansatt, Prosjekt prosjekt) {
+
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+
+		try {
+			tx.begin();
+
+			ProsjektAnsatte pa = new ProsjektAnsatte(ansatt, prosjekt);
+			prosjekt.getpDListe().add(pa);
+
+			em.persist(pa);
+
+			tx.commit();
+
+		} catch(RollbackException e) {
+			//commit failed
+			//FE: Unique constraint
+
+		} catch(Throwable e) {
+			e.printStackTrace();
+			tx.rollback();
+
+		} finally {
+			em.close();
+		}
+	}
+
+	public boolean leggTilAnsatt(String brukerNavn, String forNavn, String etterNavn, LocalDate ansettelseDato,
+			String stilling, int maanedslonn, int avdelingNr) {
+
+			EntityManager em = emf.createEntityManager();
+			EntityTransaction tx = em.getTransaction();
+
+			boolean gikkdet = false;
+			try {
+				tx.begin();
+
+				Avdeling avdeling = em.find(Avdeling.class, avdelingNr);
+				Ansatt ansatt = new Ansatt(brukerNavn, forNavn, etterNavn, ansettelseDato, stilling, maanedslonn, avdeling.getAvdeling_navn());
+
+				em.persist(ansatt);
+
+				avdeling.addAnsatt(ansatt);
+
+				tx.commit();
+				gikkdet = true;
+			} catch(RollbackException e) {
+
+				//commit failed
+				//FE: Unique constraint
+
+			} catch(Exception e) {
+
+				e.printStackTrace();
+				tx.rollback();
+
+			} finally {
+				em.close();
+			}
+			return gikkdet;
+		}
+
+	public void setRolle(Ansatt ansatt, Prosjekt prosjekt, String rolle) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+
+		try {
+			tx.begin();
+
+			ProsjektAnsatte pa = finnProsjektAnsatte(ansatt.getAnsatt_id(), prosjekt.getProsjekt_id());
+			pa.setRolle(rolle);
+
+			em.merge(prosjekt);
+			em.merge(pa);
+
+			tx.commit();
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+			em.close();
+		}
+	}
+
+	private ProsjektAnsatte finnProsjektAnsatte(int ansatt_id, int prosjekt_id) {
+		String queryString = "SELECT pa FROM ProsjektAnsatte pa WHERE pa.ansatt.ansatt_id = :aId AND pa.prosjekt.prosjekt_id = :pId";
+
+		EntityManager em = emf.createEntityManager();
+
+		ProsjektAnsatte pd = null;
+		try {
+			TypedQuery<ProsjektAnsatte> query = em.createQuery(queryString, ProsjektAnsatte.class);
+			query.setParameter("aId", ansatt_id);
+			query.setParameter("pId", prosjekt_id);
+			pd = query.getSingleResult();
+
+		} catch (NoResultException e) {
+			// e.printStackTrace();
+		} finally {
+			em.close();
+		}
+		return pd;
+	}
+
+	public void leggTilTimer(Ansatt ansatt, Prosjekt prosjekt, BigDecimal antallTimer) {
+		ProsjektAnsatte pa = finnProsjektAnsatte(ansatt.getAnsatt_id(), prosjekt.getProsjekt_id());
+		setTimer(ansatt, prosjekt, antallTimer.add(pa.getTimer()));
+	}
+	
+	public void setTimer(Ansatt ansatt, Prosjekt prosjekt, BigDecimal antallTimer) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+
+		try {
+			tx.begin();
+
+			ProsjektAnsatte pa = finnProsjektAnsatte(ansatt.getAnsatt_id(), prosjekt.getProsjekt_id());
+			pa.setTimer(antallTimer);
+
+			em.merge(prosjekt);
+			em.merge(pa);
+
+			tx.commit();
+
 		} catch (Throwable e) {
 			e.printStackTrace();
 			tx.rollback();

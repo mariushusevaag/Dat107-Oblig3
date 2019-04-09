@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Grensesnitt {
 
-	private AnsattEAO ansattEAO;
+/*	private AnsattEAO ansattEAO;
 	private AvdelingEAO avdelingEAO;
 	private ProsjektEAO prosjketEAO;
 	private ProsjektAnsatteEAO prosjektAnsatteEAO;
@@ -15,7 +15,7 @@ public class Grensesnitt {
 		this.prosjketEAO = new ProsjektEAO();
 		this.prosjektAnsatteEAO = new ProsjektAnsatteEAO();	
 	}
-	
+	*/
 	Scanner sc = new Scanner(System.in);
 	
 	public void OppstartsMeny() {

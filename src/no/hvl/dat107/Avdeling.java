@@ -1,5 +1,7 @@
 package no.hvl.dat107;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,13 +19,9 @@ public class Avdeling {
 	private String avdeling_navn;
 	private int sjef_id;
 	
-/*	@OneToMany(
-			mappedBy = "avd",
-			fetch = FetchType.EAGER,
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-			orphanRemoval = true)
-		private List<Ansatt> avdListe;
-*/
+	
+	private List<Ansatt> avdListe;
+
 	public Avdeling() {
 		
 	}
@@ -63,4 +61,21 @@ public class Avdeling {
 		return "Avdeling { ID : " + this.avdeling_id + 
 		" | Navn : " + this.avdeling_navn + " | Sjef : " + this.sjef_id + " }";
 	}
+
+	public List<Ansatt> getAvdListe() {
+		return avdListe;
+	}
+
+	public void setAvdListe(List<Ansatt> avdListe) {
+		this.avdListe = avdListe;
+	}
+
+	public void addAnsatt(Ansatt ansatt) {
+		avdListe.add(ansatt);
+	}
+
+	public void removeAnsatt(Ansatt ansatt) {
+		avdListe.remove(ansatt);
+	}
+	
 }
